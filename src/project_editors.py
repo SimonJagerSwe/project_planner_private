@@ -1,10 +1,11 @@
 ########## Project editors ##########
 # Imports
-import button_handler, project_deleter, resources, writers
+import resources
 
 from interface.ui_everyday import Ui_everydayProjectEditor
 from interface.ui_programming import Ui_programmingProjectEditor 
 from interface.ui_recurring import Ui_recurringProjectEditor
+from writers import writer
 
 from PySide6.QtCore import QDate
 from PySide6.QtWidgets import QDialog
@@ -65,14 +66,16 @@ def edit_parser(project, viewer_dialog, main_window, tab_state):
 # Save edited file, refresh project files read
 # And return to project viewer 
 def save_and_return(ui, dialog, main_window, viewer_dialog, project_type, current_project, write_type, tab_state):
+    from button_handler import project_viewer_clicked
+    from project_deleter import delete_project
     print("Deleting current project from project file...\n")
-    project_deleter.delete_project(current_project, project_type, viewer_dialog, main_window, "edit")
+    delete_project(current_project, project_type, viewer_dialog, main_window, "edit")
     print("Project deleted from project files...\n")
-    writers.writer(ui, project_type, resources.selected_project_id, dialog, main_window, write_type, return_to_main=False)
+    writer(ui, project_type, resources.selected_project_id, dialog, main_window, write_type, return_to_main=False)
     dialog.close()
     if viewer_dialog is not None:
         viewer_dialog.close()
-        button_handler.project_viewer_clicked(main_window, tab_state["main_index"],tab_state["sub_index"])
+        project_viewer_clicked(main_window, tab_state["main_index"],tab_state["sub_index"])
 
 
 # Edit everyday project 
