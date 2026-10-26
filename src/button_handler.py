@@ -23,7 +23,7 @@ from PySide6.QtWidgets import QDialog, QListWidget, QPushButton
 def main_menu_buttons(main_window):
     # Regular buttons
     add_project = main_window.findChild(QPushButton, "addProject")
-    add_project.clicked.connect(lambda: add_project_clicked(main_window, "main"))
+    add_project.clicked.connect(lambda: add_project_clicked(main_window, from_viewer=False))
     view_projects = main_window.findChild(QPushButton, "viewProjects")
     view_projects.clicked.connect(lambda: project_viewer_clicked(main_window, 0, 0))
     view_archive = main_window.findChild(QPushButton, "viewArchive")
@@ -65,8 +65,12 @@ def everyday_project_clicked(current_dialog, main_window, from_viewer=False):
     print("Add everyday project clicked")
     if current_dialog is not None:
         current_dialog.close()
-    main_window.close()
-    everyday_dialog = QDialog(None)
+    if not from_viewer:
+        main_window.close()
+    # main_window.close()
+    editor_parent = current_dialog.parentWidget() if from_viewer else main_window
+    # everyday_dialog = QDialog(None)
+    everyday_dialog = QDialog(editor_parent)
     ui = Ui_everydayProjectEditor()
     ui.setupUi(everyday_dialog)
     everyday_dialog.setWindowTitle(f"{resources.VERSION} - Add everyday project")
@@ -79,17 +83,23 @@ def everyday_project_clicked(current_dialog, main_window, from_viewer=False):
     ui.everydayReturn.clicked.connect(lambda: resources.return_to_main_clicked(everyday_dialog, main_window))
     ui.everydayExit.clicked.connect(lambda: resources.exit_clicked(everyday_dialog))
     everyday_dialog.exec()
-    if not from_viewer:
+    if from_viewer:
+        editor_parent.show()
+    else:
         main_window.show()
 
 
 # Add programming project
-def programming_project_clicked(current_dialog, main_window):
+def programming_project_clicked(current_dialog, main_window, from_viewer=False):
     print("Add programming project clicked")
     if current_dialog is not None:
         current_dialog.close()
-    main_window.close()
-    programming_dialog = QDialog(main_window)
+    if not from_viewer:
+        main_window.close()
+    # main_window.close()
+    editor_parent = current_dialog.parentWidget() if from_viewer else main_window
+    # programming_dialog = QDialog(main_window)
+    programming_dialog = QDialog(editor_parent)
     ui = Ui_programmingProjectEditor()
     ui.setupUi(programming_dialog)
     programming_dialog.setWindowTitle(f"{resources.VERSION} - Add programming project")
@@ -102,16 +112,23 @@ def programming_project_clicked(current_dialog, main_window):
     ui.programmingReturn.clicked.connect(lambda: resources.return_to_main_clicked(programming_dialog, main_window))
     ui.programmingExit.clicked.connect(lambda: resources.exit_clicked(programming_dialog))
     programming_dialog.exec()
-    main_window.show()
+    if from_viewer:
+        editor_parent.show()
+    else:
+        main_window.show()
 
 
 # Add recurring project
-def recurring_project_clicked(current_dialog, main_window):
+def recurring_project_clicked(current_dialog, main_window, from_viewer=False):
     print("Add recurring project clicked")
     if current_dialog is not None:
         current_dialog.close()
-    main_window.close()
-    recurring_dialog = QDialog(main_window)
+    if not from_viewer:
+        main_window.close()
+    # main_window.close()
+    editor_parent = current_dialog.parentWidget() if from_viewer else main_window
+    # recurring_dialog = QDialog(main_window)
+    recurring_dialog = QDialog(editor_parent)
     ui = Ui_recurringProjectEditor()
     ui.setupUi(recurring_dialog)
     recurring_dialog.setWindowTitle(f"{resources.VERSION} - Add recurring task")
@@ -120,7 +137,10 @@ def recurring_project_clicked(current_dialog, main_window):
     ui.returnToMainRecurring.clicked.connect(lambda: resources.return_to_main_clicked(recurring_dialog, main_window))
     ui.exitRecurring.clicked.connect(lambda: resources.exit_clicked(recurring_dialog))
     recurring_dialog.exec()
-    main_window.show()
+    if from_viewer:
+        editor_parent.show()
+    else:
+        main_window.show()
 
 
 # View projects and archives
