@@ -1,3 +1,4 @@
+backup_project_files
 src/__pycache__
 src/interface/__pycache__
 src/project_files/test_files.txt
